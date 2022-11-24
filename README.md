@@ -115,7 +115,7 @@ The `run` parameter should run your application using standart `go` utility.
 
 #### GoLand configuration
 
-![Example GoLand configuration](https://github.com/Galagoshin/GopherWeb/blob/master/example_conf.jpg?raw=true)
+![Example GoLand configuration](https://github.com/Galagoshin/GopherWeb/raw/master/example_conf.png)
 
 You need to run `main()` in `github.com/Galagoshin/GopherWeb/develop/main.go`
 

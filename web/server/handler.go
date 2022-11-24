@@ -26,14 +26,21 @@ func handler(w http.ResponseWriter, r *http.Request) {
 				data := r.Form
 				if route.option.len() > 0 {
 					point := false
-					name, val, skip := "", "", ""
+					name, val, skip, uris := "", "", "", 0
 					for _, char := range []rune(route.option) {
 						if string(char) == "{" && !point {
 							point = true
-							val = strings.Split(r.RequestURI[len(skip):], "/")[0]
-							skip += val
+							in := strings.Index(string(route.option)[len(skip):], "}")
+							sep := "/"
+							if in+1 < len(string(route.option)[len(skip):]) {
+								sep = string(route.option)[len(skip):][in+1 : in+2]
+							}
+							val = strings.Split(r.RequestURI[uris:], sep)[0]
+							uris += len(val)
+							skip += string(char)
 						} else if string(char) == "}" && point {
 							data.Add(name, val)
+							skip += name + "}"
 							name = ""
 							val = ""
 							point = false
@@ -41,6 +48,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 							name += string(char)
 						} else {
 							skip += string(char)
+							uris++
 						}
 					}
 				}

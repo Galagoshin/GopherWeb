@@ -8,7 +8,7 @@ import (
 
 func CompileRoute(input string) (*regexp.Regexp, option) {
 	output := ""
-	allInserts := regexp.MustCompile("{[^/]+}").FindAllString(input, -1)
+	allInserts := regexp.MustCompile("{[^/._]+}").FindAllString(input, -1)
 	opt := input
 	for _, insert := range allInserts {
 		split1 := strings.Split(insert, ": ")

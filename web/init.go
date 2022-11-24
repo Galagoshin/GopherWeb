@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-const VERSION = "1.0.0"
+const VERSION = "1.1.0"
 
 var commandsEnabled = false
 
@@ -38,14 +38,14 @@ func Init() {
 		envFile := files.File{Path: ".env"}
 		err := envFile.Open(os.O_RDWR)
 		if err == nil {
-			 for _, line := range strings.Split(envFile.ReadString(), "\n") {
-				 keyval := strings.Split(line, "=")
-				 key, val := keyval[0], keyval[1]
-				 err = os.Setenv(key, val)
-				 if err != nil {
-					 logger.Panic(err)
-				 }
-			 }
+			for _, line := range strings.Split(envFile.ReadString(), "\n") {
+				keyval := strings.Split(line, "=")
+				key, val := keyval[0], keyval[1]
+				err = os.Setenv(key, val)
+				if err != nil {
+					logger.Panic(err)
+				}
+			}
 		}
 
 		modeArg, modeErr := getArgVal("--mode", os.Args)

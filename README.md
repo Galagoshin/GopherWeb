@@ -72,8 +72,8 @@ key-file: file.key
 * `domain` - Server domain name
 * `check-hostname` - Allows accessing the webserver only with the hostname from the `domain` parameter
 * `enable-ssl` - Enable SSL
-* `crt-file` - Path to crt file (works with `enable-ssl: false`)
-* `key-file` - Path to key file (works with `enable-ssl: false`)
+* `crt-file` - Path to crt file (works with `enable-ssl: true`)
+* `key-file` - Path to key file (works with `enable-ssl: true`)
 
 ### Framework configuration
 
@@ -156,7 +156,7 @@ func info(request *requests.Request) (requests.Response, error) {
 #### Example usage
 
 ```go
-server.Route("/api/user/{id: [0-9]}", []requests.Method{requests.GET}, user)
+server.Route("/api/user/{id: [0-9]+}", []requests.Method{requests.GET}, user)
 
 func user(request *requests.Request) (requests.Response, error) {
   user_id := request.Data.Get("id")
@@ -169,7 +169,7 @@ func user(request *requests.Request) (requests.Response, error) {
 #### Example without parameter
 
 ```go
-server.Route("/api/{[A-Za-z0-9]}/get", []requests.Method{requests.GET}, hander)
+server.Route("/api/{[A-Za-z0-9]+}/get", []requests.Method{requests.GET}, hander)
 ```
 
 ### Static files

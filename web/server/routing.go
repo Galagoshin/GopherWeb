@@ -19,7 +19,7 @@ type route struct {
 }
 
 func (option option) len() int {
-	return len(regexp.MustCompile("{[^/]+}").FindAllString(string(option), -1))
+	return len(regexp.MustCompile("{[^/._]+}").FindAllString(string(option), -1))
 }
 
 var routes = []route{}

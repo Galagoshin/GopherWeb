@@ -18,6 +18,8 @@ Open-source, high-performance web framework for the Golang.
     - [Standart partials](#standart-partials)
     - [HTML escaped partials](#html-escaped-partials)
     - [Includes](#includes)
+- [Plugins](#plugins)
+  - [Example plugin](#example-plugin)
 
 ## Getting started
 
@@ -231,3 +233,50 @@ In this example, the content of `views/path/to/file.html` is set to the current 
 </head>
 ```
 
+## Plugins
+
+GopherWeb supports plugins in `.so` files.
+With plugins, you can comfortably support multi-version REST API architectures by simply uploading each new version to the `plugins` directory. Plugins can also be used for templates. For example, for a unified authorization system.
+
+### Example plugin
+
+#### Plugin code
+```go
+package main
+
+var Name = "PluginName" //Required field
+var Version = "1.0"     //Optional
+
+func GetUser() int {
+	return 1
+}
+
+func OnEnable(){        //Optional
+	//TODO
+}
+
+func OnDisable() {      //Optional
+	//TODO
+}
+```
+
+#### Plugin compilation
+`go build -buildmode=plugin -o plug_1.0.so`
+
+Then move `plug_1.0.so` to the `plugins` directory.
+
+#### Usage in GopherWeb
+
+```go
+plugin, exists := plugins.GetPlugin("PluginName", "1.0") //version can be empty to get latest version
+if exists {
+	symbol, err := plugin.Lookup("GetUser")
+	if err != nil {
+		logger.Panic(err)
+	}
+	GetUser := symbol.(func() int)
+	return GetUser() //returns 1
+}else{
+	logger.Error("Plugin is not enabled.")
+}
+```

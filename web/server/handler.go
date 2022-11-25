@@ -14,6 +14,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	found := false
 	for _, route := range routes {
+		r.RequestURI = strings.Split(r.RequestURI, "?")[0]
 		if route.pattern.MatchString(r.RequestURI) {
 			allowed := false
 			for _, allowedMethod := range route.methods {

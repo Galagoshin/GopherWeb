@@ -27,13 +27,13 @@ func EnableAllPlugins() {
 		}
 
 		symbolPluginName, err := p.Lookup("Name")
-		pluginName, ok := symbolPluginName.(string)
+		pluginName, ok := symbolPluginName.(*string)
 		if err != nil || !ok {
 			logger.Panic(errors.New("Plugin has no \"Name\" const"))
 		}
 
 		symbolPluginVersion, err := p.Lookup("Version")
-		pluginVersion, ok := symbolPluginVersion.(string)
+		pluginVersion, ok := symbolPluginVersion.(*string)
 		if err != nil || !ok {
 			logger.Warning("Plugin has no \"Version\" const")
 		}
@@ -51,42 +51,51 @@ func EnableAllPlugins() {
 		}
 
 		plug := Plugin{
-			Name:      pluginName,
-			Version:   pluginVersion,
+			Name:      *pluginName,
+			Version:   *pluginVersion,
 			OnEnable:  onEnable,
 			OnDisable: onDisable,
 			plugin:    p,
 		}
-
-		pluginStorage[pluginName] = &plug
+		_, exists := pluginStorage[*pluginName]
+		if exists {
+			pluginStorage[*pluginName][*pluginVersion] = &plug
+		} else {
+			pluginStorage[*pluginName] = make(map[string]*Plugin)
+			pluginStorage[*pluginName][*pluginVersion] = &plug
+		}
 	}
 	pluginsCounter := 0
-	for _, plug := range pluginStorage {
-		if plug.OnEnable != nil {
-			plug.OnEnable()
+	for _, vers := range pluginStorage {
+		for _, plug := range vers {
+			if plug.OnEnable != nil {
+				plug.OnEnable()
+			}
+			version := ""
+			if plug.Version != "" {
+				version = "v" + plug.Version
+			}
+			logger.Print(fmt.Sprintf("Plugin %s %s has been enabled.", plug.Name, version))
+			pluginsCounter++
 		}
-		version := ""
-		if plug.Version != "" {
-			version = "v" + plug.Version
-		}
-		logger.Print(fmt.Sprintf("Plugin %s %s has been enabled.", plug.Name, version))
-		pluginsCounter++
 	}
 	logger.Print(fmt.Sprintf("%d plugins has been enabled.", pluginsCounter))
 }
 
 func DisableAllPlugins() {
 	pluginsCounter := 0
-	for _, plug := range pluginStorage {
-		if plug.OnDisable != nil {
-			plug.OnDisable()
+	for _, vers := range pluginStorage {
+		for _, plug := range vers {
+			if plug.OnDisable != nil {
+				plug.OnDisable()
+			}
+			version := ""
+			if plug.Version != "" {
+				version = "v" + plug.Version
+			}
+			pluginsCounter++
+			logger.Print(fmt.Sprintf("Plugin %s %s has been disabled.", plug.Name, version))
 		}
-		version := ""
-		if plug.Version != "" {
-			version = "v" + plug.Version
-		}
-		pluginsCounter++
-		logger.Print(fmt.Sprintf("Plugin %s %s has been disabled.", plug.Name, version))
 	}
 	logger.Print(fmt.Sprintf("%d plugins has been disabled.", pluginsCounter))
 }

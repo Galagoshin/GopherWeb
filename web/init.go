@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-const VERSION = "1.1.0"
+const VERSION = "1.1.1-ALPHA1"
 
 var commandsEnabled = false
 
@@ -133,6 +133,7 @@ func Init() {
 
 		if livereload.(string) == "true" && framework.Mode == framework.DevelopMode {
 			tasks.RestartTask.Run(tasks.RestartTask)
+		} else if framework.Mode == framework.DevelopMode {
 			logger.Warning("This app running in develop mode, don't use it in production!")
 		}
 	})))

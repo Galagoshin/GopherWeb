@@ -62,6 +62,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 				response, err := route.handle(request)
 				if err != nil {
 					logger.Print(fmt.Sprintf("%s: %s (%d)", r.Method, r.RequestURI, 500))
+					logger.Error(err)
 					//call event cancel
 					w.WriteHeader(500)
 					_, err := w.Write([]byte("500 internal server error"))

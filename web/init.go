@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-const VERSION = "1.1.1-BETA1"
+const VERSION = "1.1.1"
 
 var commandsEnabled = false
 

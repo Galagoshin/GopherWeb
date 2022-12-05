@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-const VERSION = "1.1.1-BETA1"
+const VERSION = "1.1.2-ALPHA1"
 
 var commandsEnabled = false
 
@@ -98,9 +98,10 @@ func Init() {
 		logger.SetLogs(writeLogs.(string) == "true")
 
 		framework.BuildConfig.Init(map[string]any{
-			"run":   "run src/main.go",
-			"build": "build -o gopher_server src/main.go",
-		}, 1)
+			"run":        "run src/main.go",
+			"build":      "build -o gopher_server src/main.go",
+			"source-dir": "src",
+		}, 2)
 
 		hotreload, hotreloadError := framework.Config.Get("hot-reload-enabled")
 		if !hotreloadError {
@@ -132,6 +133,7 @@ func Init() {
 		}
 
 		if livereload.(string) == "true" && framework.Mode == framework.DevelopMode {
+			tasks.InitRestartTask()
 			tasks.RestartTask.Run(tasks.RestartTask)
 		} else if framework.Mode == framework.DevelopMode {
 			logger.Warning("This app running in develop mode, don't use it in production!")

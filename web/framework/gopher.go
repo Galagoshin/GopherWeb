@@ -67,9 +67,10 @@ func HotReload() {
 		plugins.DisableAllPlugins()
 		Config = &configs.Config{Name: "gopher"}
 		BuildConfig.Init(map[string]any{
-			"run":   "run src/main.go",
-			"build": "build -o gopher_server src/main.go",
-		}, 1)
+			"run":        "run src/main.go",
+			"build":      "build -o gopher_server src/main.go",
+			"source-dir": "src",
+		}, 2)
 		Config.Init(map[string]any{
 			"hot-reload-enabled":  "true",
 			"live-reload-enabled": "true",

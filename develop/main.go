@@ -15,9 +15,10 @@ func main() {
 	logger.SetLogs(false)
 	config := &configs.Config{Name: "build"}
 	config.Init(map[string]any{
-		"run":   "run src/main.go",
-		"build": "build -o gopher_server src/main.go",
-	}, 1)
+		"run":        "run src/main.go",
+		"build":      "build -o gopher_server src/main.go",
+		"source-dir": "src",
+	}, 2)
 	for {
 		run_str, exists := config.Get("run")
 		if !exists {
@@ -45,7 +46,7 @@ func main() {
 			if err.Error() == "exit status 2" {
 				stderr := errbuf.String()
 				logger.Panic(errors.New("compilation error: \n" + stderr))
-			}else{
+			} else {
 				logger.Panic(err)
 			}
 			break

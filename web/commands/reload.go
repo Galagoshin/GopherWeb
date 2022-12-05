@@ -34,6 +34,7 @@ func Reload(string, []string) {
 	if livereload.(string) == "false" && prevLive.(string) != livereload.(string) {
 		tasks.RestartTask.Destroy()
 	} else if livereload.(string) == "true" && prevLive.(string) != livereload.(string) {
+		tasks.InitRestartTask()
 		tasks.RestartTask.Run(tasks.RestartTask)
 	}
 }

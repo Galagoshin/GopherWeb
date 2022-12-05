@@ -62,6 +62,7 @@ func HotReloadExecutor(args ...any) {
 			if livereload.(string) == "false" && prevLive.(string) != livereload.(string) {
 				RestartTask.Destroy()
 			} else if livereload.(string) == "true" && prevLive.(string) != livereload.(string) {
+				InitRestartTask()
 				RestartTask.Run(RestartTask)
 			}
 			return
